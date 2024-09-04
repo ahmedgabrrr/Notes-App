@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
+
+import { BASE_URL } from "../../utils/constants";
 
 import axios from "axios";
 
@@ -9,6 +11,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { NavbarNorm } from "../../components/NavbarNorm/NavbarNorm";
+import ResendCode from "../../components/ResendButton/ResendCode";
 
 const CodeValidation = () => {
   let navigate = useNavigate();
@@ -18,11 +21,11 @@ const CodeValidation = () => {
   function sendDataToApi(values) {
     setLoading(false);
     axios
-      .post("http://localhost:8000/authcode", values)
+      .post(`${BASE_URL}/authcode`, values)
       .then(({ data }) => {
         console.log(data);
         if (data.message === "done") {
-          navigate("/newpassword");
+          navigate(`/newpassword/${data.userId}`);
         }
       })
       .catch((err) => {
@@ -63,9 +66,10 @@ const CodeValidation = () => {
               name="isCodeTrue"
             />
 
-            {codevalidation.errors.isCodeTrue && codevalidation.touched.isCodeTrue ? (
+            {codevalidation.errors.isCodeTrue &&
+              codevalidation.touched.isCodeTrue ? (
               <div className="p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400">
-                {codevalidation.errors.isCodeTrue}
+                The Input Is Empty !
               </div>
             ) : (
               ""
@@ -79,6 +83,7 @@ const CodeValidation = () => {
               Submit Code
             </button>
           </form>
+          <ResendCode />
         </div>
       </div>
     </>

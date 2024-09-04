@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
+
+import { BASE_URL } from "../../utils/constants";
 
 import axios from "axios";
 
@@ -18,7 +20,7 @@ const ResetPassword = () => {
   function sendDataToApi(values) {
     setLoading(false);
     axios
-      .post("http://localhost:8000/sendCode", values)
+      .post(`${BASE_URL}/sendCode`, values)
       .then(({ data }) => {
         console.log(data);
         navigate("/validation");
